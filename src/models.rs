@@ -1,6 +1,6 @@
 use diesel::{insert_into, sql_types::Integer, Insertable, Queryable};
 
-use crate::schema::{task, todo};
+use crate::schema::{task, todo::{self}};
 
 #[derive(Queryable, Debug)]
 #[diesel(table_name = task)]
@@ -15,6 +15,7 @@ pub struct Task {
 pub struct Todo {
     pub id: i32,
     pub name: String,
+    pub is_completed: i32,
     pub todo_id: i32,
 }
 
@@ -27,5 +28,6 @@ pub struct NewTask {
 #[diesel(table_name = todo)]
 pub struct NewTodo {
     pub name: String,
+    pub is_completed: i32,
     pub todo_id: i32,
 }

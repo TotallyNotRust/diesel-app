@@ -24,28 +24,34 @@ fn main() {
     // Insert produce software
     insert_todo(NewTodo {
         name: String::from("Write code"),
+        is_completed: 0,
         todo_id: 1,
     });
     insert_todo(NewTodo {
         name: String::from("Compile code"),
+        is_completed: 0,
         todo_id: 1,
     });
     insert_todo(NewTodo {
         name: String::from("Test program"),
+        is_completed: 0,
         todo_id: 1,
     });
 
     // Insert brew coffee
     insert_todo(NewTodo {
         name: String::from("Pour water"),
+        is_completed: 0,
         todo_id: 2,
     });
     insert_todo(NewTodo {
         name: String::from("Pour coffee"),
+        is_completed: 0,
         todo_id: 2,
     });
     insert_todo(NewTodo {
         name: String::from("Turn on"),
+        is_completed: 0,
         todo_id: 2,
     });
 

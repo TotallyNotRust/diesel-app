@@ -12,6 +12,7 @@ diesel::table! {
         id -> Integer,
         name -> Text,
         todo_id -> Integer,
+        is_completed -> Integer,
     }
 }
 
