@@ -1,49 +1,40 @@
-use std::collections::HashMap;
-
-use crate::{
-    establish_connection,
-    models::{Task, Todo},
-};
-use diesel::{associations::HasTable, QueryDsl, RunQueryDsl};
-use diesel::{expression_methods::ExpressionMethods, Identifiable};
+use crate::{establish_connection, models::Task};
+use diesel::{BelongingToDsl, RunQueryDsl};
 
 pub fn print_incomplete_tasks_and_todos() {
     let _connection = &mut establish_connection();
 
-    {
-        use crate::schema::task::dsl::*;
-        use crate::schema::todo::dsl::{is_completed, todo};
+    use crate::models::Todo;
+    use crate::schema::task::dsl::task;
 
-        let values: Vec<(Task, Todo)> = task
-            .inner_join(todo::table())
-            .filter(is_completed.eq(0))
-            .load::<(Task, Todo)>(_connection)
-            .expect("");
+    // load all tasks
+    let tasks = task.load::<Task>(_connection).expect("");
 
-        println!("{:?}", values);
-
-        let mut map: HashMap<i32, i32> = HashMap::new();
-        for value in values {
-            if value.1.is_completed != 1 {
-                let amount = map.remove(value.0.id());
-                match amount {
-                    Some(n) => {
-                        map.remove(value.0.id());
-                        map.insert(value.0.id, 1 + n);
+    'taskloop: for _task in tasks {
+        // Hent alle todos med foreign key til en task
+        let todos = Todo::belonging_to(&_task).load::<Todo>(_connection);
+        // Check om vi kunne hente todos succesfuldt
+        match todos {
+            Err(n) => {
+                println!("Could not get tasks for {:?}, got error: {:?}", _task, n);
+                continue 'taskloop;
+            }
+            Ok(n) => {
+                // Vis vi har hentet todo succesfuldt så tjek om der er nogen der ikke er "completed"
+                let mut unfinished: Vec<Todo> = vec![];
+                for _todo in n {
+                    if _todo.is_completed != 1 {
+                        unfinished.push(_todo);
                     }
-                    None => {
-                        map.insert(value.0.id().to_owned(), 1);
+                }
+                // Hvis der er nogen todos der ikke er færdige så print dem.
+                if !(unfinished.is_empty()) {
+                    println!("{} has unfinished tasks", _task.name);
+                    for _todo in unfinished {
+                        println!("-> {}", _todo.name);
                     }
                 }
             }
         }
-        println!("{:?}", map);
-        // let todos = match task.load::<Task>(_connection) {
-        //     Ok(n) => n,
-        //     Err(n) => {
-        //         println!("An error occured: {:?}", n);
-        //         return;
-        //     }
-        // };
     }
 }
