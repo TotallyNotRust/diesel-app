@@ -11,12 +11,12 @@ diesel::table! {
     todo (id) {
         id -> Integer,
         name -> Text,
-        todo_id -> Integer,
+        task_id -> Integer,
         is_completed -> Integer,
     }
 }
 
-diesel::joinable!(todo -> task (todo_id));
+diesel::joinable!(todo -> task (task_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     task,
