@@ -1,4 +1,4 @@
-use crate::{establish_connection, models::Task};
+use crate::{establish_connection, insert::*, models::Task};
 use diesel::{BelongingToDsl, RunQueryDsl};
 
 pub fn print_incomplete_tasks_and_todos() {
@@ -35,6 +35,156 @@ pub fn print_incomplete_tasks_and_todos() {
                     }
                 }
             }
+        }
+    }
+}
+pub fn generate_data() {
+    use crate::insert::*;
+    use crate::models::*;
+
+    insert_task(NewTask {
+        name: String::from("Produce software"),
+    });
+    //
+    insert_task(NewTask {
+        name: String::from("Brew coffee"),
+    });
+
+    // Insert produce software
+    insert_todo(NewTodo {
+        name: String::from("Write code"),
+        is_completed: 0,
+        task_id: 1,
+    });
+    insert_todo(NewTodo {
+        name: String::from("Compile code"),
+        is_completed: 0,
+        task_id: 1,
+    });
+    insert_todo(NewTodo {
+        name: String::from("Test program"),
+        is_completed: 0,
+        task_id: 1,
+    });
+
+    // Insert brew coffee
+    insert_todo(NewTodo {
+        name: String::from("Pour water"),
+        is_completed: 0,
+        task_id: 2,
+    });
+    insert_todo(NewTodo {
+        name: String::from("Pour coffee"),
+        is_completed: 0,
+        task_id: 2,
+    });
+    insert_todo(NewTodo {
+        name: String::from("Turn on"),
+        is_completed: 0,
+        task_id: 2,
+    });
+}
+
+pub fn seed_workers() {
+    // insert teams
+    {
+        use crate::models::NewTeam;
+
+        insert_team(NewTeam {
+            name: String::from("Frontend"),
+        });
+        insert_team(NewTeam {
+            name: String::from("Backend"),
+        });
+        insert_team(NewTeam {
+            name: String::from("Testere"),
+        });
+    }
+    // insert workers
+    {
+        use crate::models::NewWorker;
+
+        insert_worker(NewWorker {
+            name: String::from("Steen Secher"),
+        });
+        insert_worker(NewWorker {
+            name: String::from("Ejvind Møller"),
+        });
+        insert_worker(NewWorker {
+            name: String::from("Konrad Sommer"),
+        });
+        insert_worker(NewWorker {
+            name: String::from("Sofus Lotus"),
+        });
+        insert_worker(NewWorker {
+            name: String::from("Remo Lademann"),
+        });
+        insert_worker(NewWorker {
+            name: String::from("Ella Fanth"),
+        });
+        insert_worker(NewWorker {
+            name: String::from("Anne Dam"),
+        });
+    }
+    // insert team workers
+    {
+        use crate::models::NewTeamWorker;
+        // Steen Secher (0)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 0,
+                team_id: 0,
+            });
+            insert_team_worker(NewTeamWorker {
+                worker_id: 0,
+                team_id: 2,
+            });
+        }
+        // Ejvind Møller (1)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 1,
+                team_id: 0,
+            });
+        }
+        // Konrad Sommer (2)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 2,
+                team_id: 0,
+            });
+            insert_team_worker(NewTeamWorker {
+                worker_id: 2,
+                team_id: 1,
+            });
+        }
+        // Sofus Lotus (3)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 3,
+                team_id: 1,
+            });
+        }
+        // Remo Lademann (4)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 4,
+                team_id: 1,
+            });
+        }
+        // Ella Fanth (5)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 5,
+                team_id: 2,
+            });
+        }
+        // Anne Damn (6)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 6,
+                team_id: 2,
+            });
         }
     }
 }
