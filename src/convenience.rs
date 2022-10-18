@@ -129,61 +129,61 @@ pub fn seed_workers() {
     // insert team workers
     {
         use crate::models::NewTeamWorker;
-        // Steen Secher (0)
-        {
-            insert_team_worker(NewTeamWorker {
-                worker_id: 0,
-                team_id: 0,
-            });
-            insert_team_worker(NewTeamWorker {
-                worker_id: 0,
-                team_id: 2,
-            });
-        }
-        // Ejvind Møller (1)
+        // Steen Secher (1)
         {
             insert_team_worker(NewTeamWorker {
                 worker_id: 1,
-                team_id: 0,
+                team_id: 1,
+            });
+            insert_team_worker(NewTeamWorker {
+                worker_id: 1,
+                team_id: 3,
             });
         }
-        // Konrad Sommer (2)
+        // Ejvind Møller (2)
         {
-            insert_team_worker(NewTeamWorker {
-                worker_id: 2,
-                team_id: 0,
-            });
             insert_team_worker(NewTeamWorker {
                 worker_id: 2,
                 team_id: 1,
             });
         }
-        // Sofus Lotus (3)
+        // Konrad Sommer (3)
         {
             insert_team_worker(NewTeamWorker {
                 worker_id: 3,
                 team_id: 1,
             });
+            insert_team_worker(NewTeamWorker {
+                worker_id: 3,
+                team_id: 2,
+            });
         }
-        // Remo Lademann (4)
+        // Sofus Lotus (4)
         {
             insert_team_worker(NewTeamWorker {
                 worker_id: 4,
-                team_id: 1,
+                team_id: 2,
             });
         }
-        // Ella Fanth (5)
+        // Remo Lademann (5)
         {
             insert_team_worker(NewTeamWorker {
                 worker_id: 5,
                 team_id: 2,
             });
         }
-        // Anne Damn (6)
+        // Ella Fanth (6)
         {
             insert_team_worker(NewTeamWorker {
                 worker_id: 6,
-                team_id: 2,
+                team_id: 3,
+            });
+        }
+        // Anne Damn (7)
+        {
+            insert_team_worker(NewTeamWorker {
+                worker_id: 7,
+                team_id: 3,
             });
         }
     }
