@@ -1,4 +1,4 @@
-use crate::{establish_connection, insert::*, models::Task};
+use crate::{establish_connection, insert::*, models::{Task, Team}};
 use diesel::{BelongingToDsl, RunQueryDsl};
 
 pub fn print_team_and_tasks() {
@@ -239,4 +239,33 @@ pub fn seed_workers() {
             });
         }
     }
+}
+
+pub fn print_teams_without_tasks() -> Vec<Team>{
+    let _connection = &mut establish_connection();
+
+    use crate::models::{Task, Team};
+    use crate::schema::task;
+    use crate::schema::team::dsl::team;
+
+    let teams = team
+        .load::<Team>(_connection)
+        .expect("Could not load teams");
+
+    if teams.is_empty() {
+        println!("No teams found");
+    }
+
+    let mut teams_without_tasks = vec![];
+
+    'teamloop: for _team in teams {
+        let tasks = Task::belonging_to(&_team)
+            .load::<Task>(_connection)
+            .expect("Could not load tasks");
+
+        if tasks.is_empty() {
+            teams_without_tasks.push(_team);
+        }
+    }
+    return teams_without_tasks;
 }

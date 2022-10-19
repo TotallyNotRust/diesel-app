@@ -17,15 +17,17 @@ fn main() {
     println!("Hello, world!");
     // // Create tasks
 
-    generate_data();
+    // generate_data();
 
     // select_task();
 
     // convenience::print_incomplete_tasks_and_todos();
 
-    convenience::seed_workers();
+    // convenience::seed_workers();
 
-    print_team_and_tasks();
+    // print_team_and_tasks();
+
+    println!("{:?}", print_teams_without_tasks());
 }
 
 pub fn establish_connection() -> SqliteConnection {

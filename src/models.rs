@@ -52,7 +52,7 @@ pub struct Worker {
     pub name: String,
     pub current_todo: i32,
 }
-#[derive(Queryable, Identifiable)]
+#[derive(Queryable, Identifiable, Debug)]
 #[diesel(table_name = team)]
 pub struct Team {
     pub id: i32,
