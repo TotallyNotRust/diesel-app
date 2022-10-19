@@ -57,7 +57,7 @@ pub struct Worker {
 pub struct Team {
     pub id: i32,
     pub name: String,
-    pub task_id: i32,
+    pub current_task: i32,
 }
 #[derive(Queryable, Associations)]
 #[belongs_to(Team)]
