@@ -1,6 +1,40 @@
 use crate::{establish_connection, insert::*, models::Task};
 use diesel::{BelongingToDsl, RunQueryDsl};
 
+pub fn print_team_and_tasks() {
+    let _connection = &mut establish_connection();
+
+    use crate::models::{Task, Team};
+    use crate::schema::task;
+    use crate::schema::team::dsl::team;
+
+    let teams = team
+        .load::<Team>(_connection)
+        .expect("Could not load teams");
+
+    if teams.is_empty() {
+        println!("No teams found");
+    }
+
+    'teamloop: for _team in teams {
+        let tasks = Task::belonging_to(&_team)
+            .load::<Task>(_connection)
+            .expect("Could not load tasks");
+
+        if tasks.is_empty() {
+            println!("{}", _team.name);
+            println!("-> Empty");
+
+            continue 'teamloop;
+        }
+
+        println!("{}", _team.name);
+        for _task in tasks {
+            println!("-> {}", _task.name);
+        }
+    }
+}
+
 pub fn print_incomplete_tasks_and_todos() {
     let _connection = &mut establish_connection();
 
@@ -44,10 +78,12 @@ pub fn generate_data() {
 
     insert_task(NewTask {
         name: String::from("Produce software"),
+        team_id: 1,
     });
     //
     insert_task(NewTask {
         name: String::from("Brew coffee"),
+        team_id: 3,
     });
 
     // Insert produce software
@@ -55,16 +91,19 @@ pub fn generate_data() {
         name: String::from("Write code"),
         is_completed: 0,
         task_id: 1,
+        worker_id: -1,
     });
     insert_todo(NewTodo {
         name: String::from("Compile code"),
         is_completed: 0,
         task_id: 1,
+        worker_id: -1,
     });
     insert_todo(NewTodo {
         name: String::from("Test program"),
         is_completed: 0,
         task_id: 1,
+        worker_id: -1,
     });
 
     // Insert brew coffee
@@ -72,16 +111,19 @@ pub fn generate_data() {
         name: String::from("Pour water"),
         is_completed: 0,
         task_id: 2,
+        worker_id: -1,
     });
     insert_todo(NewTodo {
         name: String::from("Pour coffee"),
         is_completed: 0,
         task_id: 2,
+        worker_id: -1,
     });
     insert_todo(NewTodo {
         name: String::from("Turn on"),
         is_completed: 0,
         task_id: 2,
+        worker_id: -1,
     });
 }
 
@@ -92,12 +134,15 @@ pub fn seed_workers() {
 
         insert_team(NewTeam {
             name: String::from("Frontend"),
+            current_task: 1,
         });
         insert_team(NewTeam {
             name: String::from("Backend"),
+            current_task: 1,
         });
         insert_team(NewTeam {
             name: String::from("Testere"),
+            current_task: 2,
         });
     }
     // insert workers
@@ -106,24 +151,31 @@ pub fn seed_workers() {
 
         insert_worker(NewWorker {
             name: String::from("Steen Secher"),
+            current_todo: -1,
         });
         insert_worker(NewWorker {
             name: String::from("Ejvind Møller"),
+            current_todo: -1,
         });
         insert_worker(NewWorker {
             name: String::from("Konrad Sommer"),
+            current_todo: -1,
         });
         insert_worker(NewWorker {
             name: String::from("Sofus Lotus"),
+            current_todo: -1,
         });
         insert_worker(NewWorker {
             name: String::from("Remo Lademann"),
+            current_todo: -1,
         });
         insert_worker(NewWorker {
             name: String::from("Ella Fanth"),
+            current_todo: -1,
         });
         insert_worker(NewWorker {
             name: String::from("Anne Dam"),
+            current_todo: -1,
         });
     }
     // insert team workers
