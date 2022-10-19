@@ -1,4 +1,8 @@
-use crate::{establish_connection, insert::*, models::{Task, Team}};
+use crate::{
+    establish_connection,
+    insert::*,
+    models::{Task, Team},
+};
 use diesel::{BelongingToDsl, RunQueryDsl};
 
 pub fn print_team_and_tasks() {
@@ -28,7 +32,7 @@ pub fn print_team_and_tasks() {
             continue 'teamloop;
         }
 
-        println!("{}", _team.name);
+        println!("{} has tasks", _team.name);
         for _task in tasks {
             println!("-> {}", _task.name);
         }
@@ -241,7 +245,7 @@ pub fn seed_workers() {
     }
 }
 
-pub fn print_teams_without_tasks() -> Vec<Team>{
+pub fn print_teams_without_tasks() -> Vec<Team> {
     let _connection = &mut establish_connection();
 
     use crate::models::{Task, Team};
