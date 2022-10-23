@@ -27,7 +27,9 @@ fn main() {
 
     // print_team_and_tasks();
 
-    println!("{:?}", print_teams_without_tasks());
+    // println!("{:?}", print_teams_without_tasks());
+
+    print_progress()
 }
 
 pub fn establish_connection() -> SqliteConnection {

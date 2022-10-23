@@ -2,7 +2,7 @@ use diesel::{
     insert_into,
     internal::derives,
     sql_types::{Integer, Nullable},
-    Associations, Identifiable, Insertable, Queryable,
+    Associations, Identifiable, Insertable, Queryable, deserialize,
 };
 
 use crate::schema::{task, team, team_worker, todo, worker};

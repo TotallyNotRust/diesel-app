@@ -44,6 +44,8 @@ diesel::table! {
 
 diesel::joinable!(team_worker -> worker (worker_id));
 
+diesel::joinable!(team -> task (current_task));
+
 diesel::allow_tables_to_appear_in_same_query!(
     task,
     team,

@@ -1,9 +1,10 @@
 use crate::{
     establish_connection,
     insert::*,
-    models::{Task, Team},
+    models::{Task, Team, Todo},
+    schema::todo::is_completed,
 };
-use diesel::{BelongingToDsl, RunQueryDsl};
+use diesel::{prelude::*, sql_types::Nullable};
 
 pub fn print_team_and_tasks() {
     let _connection = &mut establish_connection();
@@ -155,15 +156,15 @@ pub fn seed_workers() {
 
         insert_worker(NewWorker {
             name: String::from("Steen Secher"),
-            current_todo: -1,
+            current_todo: 1,
         });
         insert_worker(NewWorker {
             name: String::from("Ejvind Møller"),
-            current_todo: -1,
+            current_todo: 2,
         });
         insert_worker(NewWorker {
             name: String::from("Konrad Sommer"),
-            current_todo: -1,
+            current_todo: 3,
         });
         insert_worker(NewWorker {
             name: String::from("Sofus Lotus"),
@@ -175,11 +176,11 @@ pub fn seed_workers() {
         });
         insert_worker(NewWorker {
             name: String::from("Ella Fanth"),
-            current_todo: -1,
+            current_todo: 4,
         });
         insert_worker(NewWorker {
             name: String::from("Anne Dam"),
-            current_todo: -1,
+            current_todo: 5,
         });
     }
     // insert team workers
@@ -272,4 +273,52 @@ pub fn print_teams_without_tasks() -> Vec<Team> {
         }
     }
     return teams_without_tasks;
+}
+
+pub fn print_progress() {
+    let _connection = &mut establish_connection();
+
+    use crate::models::{Task, Team};
+    use crate::schema::task::dsl::task;
+    use crate::schema::team::dsl::team;
+    use crate::schema::todo::dsl::{id, todo};
+
+    let join = team.left_outer_join(task);
+
+    let team_tasks = join.load::<(Team, Option<Task>)>(_connection).expect("");
+
+    for (_team, _option_task) in team_tasks {
+        let _task;
+        match _option_task {
+            Some(n) => {
+                println!("Found task for {}: {}", _team.name, n.name);
+                _task = n;
+            }
+            None => {
+                println!("No task for {}", _team.name);
+                continue;
+            }
+        }
+        let todos = Todo::belonging_to(&_task)
+            .select(is_completed)
+            .load::<i32>(_connection)
+            .expect("Could not load todos");
+        let mut amount_completed = 0.0;
+        let mut amount_total = 0.0;
+
+        for completed in todos {
+            if completed == 1 {
+                amount_completed += 1.0;
+            }
+            amount_total += 1.0;
+        }
+
+        println!(
+            "{} is {:.1}% completed ({}/{} tasks completed)",
+            _team.name,
+            amount_completed / amount_total * 100.0,
+            amount_completed,
+            amount_total,
+        )
+    }
 }
