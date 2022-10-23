@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/gusta/Documents/GitHub/diesel-app/Opgave-2.8/Opgave-2.8/database.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="753"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">-- CREATE TABLE User (
+-- UserId INTEGER, 
+--  Username VARCHAR(32), 
+--  Password CHAR(36),
+--  PRIMARY KEY ( UserId AUTOINCREMENT)
+--  )
+-- 
+-- CREATE TABLE GroupUser(
+-- GroupId INTEGER,
+-- Name TEXT(32),
+-- PRIMARY KEY (GroupId AUTOINCREMENT)
+-- )
+
+-- 
+-- CREATE TABLE Groups(
+-- GroupId INTEGER,
+-- Name TEXT(32),
+-- PRIMARY KEY (GroupId AUTOINCREMENT)
+-- )
+-- ;
+-- 
+CREATE TABLE GroupUser(GroupId INT, UserId INT, PRIMARY KEY(GroupId, UserId))
+-- </sql><sql name="SQL 2">-- INSERT INTO User (Username, Password) VALUES (&quot;Konrad&quot;, &quot;123&quot;), (&quot;Anne&quot;, &quot;123&quot;), (&quot;Steen&quot;, &quot;123&quot;), (&quot;Remo&quot;, &quot;123&quot;)
+-- INSERT INTO Groups (name) values (&quot;Bruger&quot;), (&quot;Administrator&quot;)
+INSERT INTO GroupUser values (1,1), (2,1), (1,2), (2,2), (1,3), (1,4)</sql><sql name="SQL 3">SELECT User.Username, Groups.Name FROM GroupUser
+	LEFT JOIN User ON GroupUser.UserId == User.UserId
+	LEFT JOIN Groups ON GroupUser.GroupId == Groups.GroupId
+
+-- SELECT * FROM GroupUser</sql><current_tab id="2"/></tab_sql></sqlb_project>
